@@ -1,0 +1,36 @@
+﻿  main.cc
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(10823,1): warning C4005: 'LoadImage': macro redefinition
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\pch.h(57): message : see previous definition of 'LoadImage'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\playsoundapi.h(121,1): warning C4005: 'PlaySound': macro redefinition
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\pch.h(58): message : see previous definition of 'PlaySound'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\io.h(9,30): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\io.h(9,30): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\io.h(10,34): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\io.h(10,34): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(73,1): warning C4005: 'EPSILON': macro redefinition
+C:\Users\eatol\Documents\Apollo\branches\censer\raylib\src\raymath.h(81): message : see previous definition of 'EPSILON'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(132,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(133,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(134,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(135,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(975,13): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(981,13): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\common.h(987,13): warning C4305: 'return': truncation from 'int' to 'bool'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\Entity.h(782,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\Entity.h(1162,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\Entity.h(1163,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\Entity.h(1168,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(164,38): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(164,38): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(164,57): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(164,57): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(215,1): warning C4267: 'initializing': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(245,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(272,1): warning C4267: 'initializing': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\LevelFile.h(302,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\eatol\Documents\Apollo\branches\censer\raylib\src\config.h(108,1): warning C4005: 'RL_CULL_DISTANCE_FAR': macro redefinition
+C:\Users\eatol\Documents\Apollo\branches\censer\raylib\src\rlgl.h(230): message : see previous definition of 'RL_CULL_DISTANCE_FAR'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\main.cc(113,45): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\main.cc(639,55): warning C4305: 'argument': truncation from 'double' to 'const float'
+C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\main.cc(1565,48): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  DroneDefense_raylib.vcxproj -> C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\..\bin\Debug\censer.exe

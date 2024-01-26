@@ -1,0 +1,6 @@
+﻿  imgui_impl_raylib.cpp
+C:\Users\eatol\Documents\Apollo\branches\censer\dep\imgui-impl-raylib\imgui_impl_raylib.cpp(77,52): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\dep\imgui-impl-raylib\imgui_impl_raylib.cpp(77,37): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\dep\imgui-impl-raylib\imgui_impl_raylib.cpp(86,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\eatol\Documents\Apollo\branches\censer\dep\imgui-impl-raylib\imgui_impl_raylib.cpp(86,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  DroneDefense_raylib.vcxproj -> C:\Users\eatol\Documents\Apollo\branches\censer\DroneDefense_raylib\..\bin\Release\censer.exe

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="..\dep\imgui-impl-raylib\imgui_impl_raylib.cpp">
+      <Filter>dep\imgui-raylib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dep\imgui-1.73\imgui.cpp">
+      <Filter>dep\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dep\imgui-1.73\imgui_demo.cpp">
+      <Filter>dep\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dep\imgui-1.73\imgui_draw.cpp">
+      <Filter>dep\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dep\imgui-1.73\imgui_widgets.cpp">
+      <Filter>dep\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="io.cpp" />
+    <ClCompile Include="pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common.h" />
+    <ClInclude Include="debug_draw.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="LevelFile.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="..\dep\cute\cute_files.h">
+      <Filter>dep\cute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dep\cute\cute_path.h">
+      <Filter>dep\cute</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_manager.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="io.h" />
+    <ClInclude Include="audio_manager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="dep">
+      <UniqueIdentifier>{3caf0b66-cf16-4446-a256-7feb5d3f1925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dep\imgui">
+      <UniqueIdentifier>{09430281-46f8-475c-9cd8-4e944d6fea15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dep\imgui-raylib">
+      <UniqueIdentifier>{ace4de35-7e12-4ddc-8fe5-f9f356d2c2a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dep\cute">
+      <UniqueIdentifier>{0124c5c4-5ef4-43d8-a616-9764f2e2c79d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
