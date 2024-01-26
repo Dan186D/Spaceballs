@@ -36,40 +36,6 @@ extern bool debug_enemy;
 struct input_state_t;
 extern input_state_t inputs;
 
-struct collision_manager_t;
-extern collision_manager_t collision_manager;
-
-extern Camera3D player_camera;
-
-extern Shader ground_shader;
-
-struct enemy_t;
-const int starting_enemies = 20;
-#define MAX_ENEMIES 300
-extern enemy_t enemies[MAX_ENEMIES];
-struct enemy_manager_t;
-extern struct enemy_manager_t enemy_manager;
-
-#define MAX_BULLETS 60
-struct bullet_manager_t;
-extern bullet_manager_t bullet_manager;
-
-struct text_trigger_manager_t;
-extern text_trigger_manager_t text_trigger_manager;
-
-#define OBJ_ID_ROLLOVER 1028;
-struct object_id_manager_t;
-extern object_id_manager_t ID_map;
-
-struct debug_drawer_t;
-extern debug_drawer_t debug_drawer;
-
-struct particle_system_t;
-extern particle_system_t particle_system;
-
-struct audio_manager_t;
-extern audio_manager_t audio_manager;
-
 #define EPSILON 1e-10f
 #define asize(a) (int)(sizeof(a)/sizeof(*a))
 #define inl __forceinline
@@ -1092,7 +1058,6 @@ struct object_id_manager_t {
 
 	int gen_id() {
 		int out_id = object_id_i;
-		object_id_i = (object_id_i + 1) % OBJ_ID_ROLLOVER;
 		return out_id;
 	}
 
