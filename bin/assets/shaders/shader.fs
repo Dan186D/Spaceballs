@@ -1,15 +1,12 @@
 #version 330 core
 
-struct light_t{
-	vec3 pos;
-	vec3 colour;
-	float constant;
-	float linear;
-	float quadratic;
-	bool on;
+struct body_t{
+	vec2 position;
+	float mass;
+	float radius;
 };
 
-#define LIGHT_NUM 5
+#define BODY_NUM 20 
 
 uniform sampler2D texture0;
 uniform vec3 u_clear_col;
@@ -19,7 +16,7 @@ uniform vec3 u_cam_pos;
 uniform float u_cam_near;
 uniform float u_cam_far;
 uniform float u_time;
-uniform light_t u_lights[LIGHT_NUM];
+uniform body_t u_bodies[BODY_NUM];
 uniform float u_log_depth;
 uniform bool u_drawing_far_plane;
 
@@ -116,143 +113,20 @@ float snoise(vec3 p) {
 }
 
 void main() {
-	vec3 result;
-	vec3 cam_to_frag;
-	if(u_drawing_far_plane){
-		cam_to_frag = fragPosition - u_cam_pos;
-		cam_to_frag = normalize(cam_to_frag)*10000;
-	}else{
-		cam_to_frag = fragPosition - u_cam_pos;
-	}
-	vec3 view_dir = normalize(cam_to_frag);
 
-	for(int i = 0; i < LIGHT_NUM; i++)
+vec2 pos = vec2(gl_FragCoord.x, (1080*1.7) - gl_FragCoord.y );
+float dist = 1000.0;
+	for(int i = 0; i < BODY_NUM; i++)
 	{
-		if(!u_lights[i].on && !u_drawing_far_plane){
-			continue;
-		}
+	  dist = min(dist, length(u_bodies[i].position - pos.xy));
 
-		// ambient
-		float ambientStrength = 1;
-		vec3 lightCol = u_lights[i].colour;
-		vec3 lightPosition = u_lights[i].pos;
-		vec3 ambient = ambientStrength * lightCol * texture(texture0, fragTexCoord).rgb;
-
-		//diffuse
-		vec3 norm = normalize(fragNormal);
-		vec3 lightDir = normalize(lightPosition - fragPosition);
-		float diff = max(dot(norm, lightDir), 0.0);
-		vec3 diffuse = diff * lightCol * texture(texture0, fragTexCoord).rgb;
-
-		//specular
-		float specularStrength = 0.5;
-		vec3 reflectDir = reflect(-lightDir, norm);
-		float spec = pow(max(dot(view_dir, reflectDir), 0.0), 32);
-		vec3 specular = specularStrength * spec * lightCol * texture(texture0, fragTexCoord).rgb;
-
-		//attenuation
-		float distance = length(lightPosition - fragPosition);
-		float attenuation = 1.0 / (u_lights[i].constant + u_lights[i].linear * distance + u_lights[i].quadratic * (distance * distance)); 
-
-		ambient *= attenuation;
-		diffuse *= attenuation;
-		specular *= attenuation;
-
-		result += (ambient + diffuse + specular);
 	}
 
-	float depth = (length(u_cam_pos - fragPosition) - 0.01)/(u_cam_far - 0.01);
-#if 0	
-	depth += clamp(0.5f+snoise(fragPosition/50.f + u_time/5000.), 0, 1)/30.;
-	depth = clamp(depth, 0, 1);
-	vec4 linear = vec4(mix(u_clear_col, result, (1-depth)), 1.0f) + random(gl_FragCoord + u_time)/255.0f;
-#endif
-
-
-//look_line = u_cam_pos + (fragpos - u_cam_pos)*t
-// x = u_cam_pos.x + (fragpos.x - u_cam_pos.x)*t
-// y_intercept = u_cam_pos.y + (fragpos.y - u_cam_pos.y)*t
-// t = (y_intercept - u_cam_pos.y)/(fragpos.y - u_cam_pos.y);
-
-// where 0 =< t =< 1
-
-
-
-//how fog is done
-
-//          C
-/*           \
--------------- \------------------------- fog max
-                 \  ''\   
-			       \    \- fog ammount  
-				     \  _\   
-----------------------\------------------- fog min
-                       \     
-                        \     
-                         F
-*/
-float max_fog_t = (u_fog_max - u_cam_pos.y)/(fragPosition.y - u_cam_pos.y);
-float min_fog_t = (u_fog_min - u_cam_pos.y)/(fragPosition.y - u_cam_pos.y);
-
-bool max_hit = max_fog_t >= 0.0 && max_fog_t <= 1.0;
-bool min_hit = min_fog_t >= 0.0 && min_fog_t <= 1.0;
-#if 1
-//try new 
-vec3 p1, p2;
-if(max_hit && min_hit) {
-// looking through fog volume
-	vec3 max_q = u_cam_pos + (fragPosition - u_cam_pos)*max_fog_t;
-	vec3 min_q = u_cam_pos + (fragPosition - u_cam_pos)*min_fog_t;
-	 p1 = max_q;
-	 p2 = min_q;
-}else if(max_hit || min_hit) {
-	if(u_cam_pos.y > u_fog_min && u_cam_pos.y < u_fog_max){
-	//inside fog looking out
-		vec3 q = u_cam_pos + (fragPosition - u_cam_pos)*(max(max_fog_t, min_fog_t));
-	 p1 = u_cam_pos;
-	 p2 = q;
-	}else{
-	//outside fog looking in
-		vec3 q = u_cam_pos + (fragPosition - u_cam_pos)*(min(max_fog_t, min_fog_t));
-		 p1 = fragPosition;
-		p2 = q;
-	}
-}
-else {
-	//inside fog looking in or outside fog looking out
-	 p1 = u_cam_pos;
-	 p2 = fragPosition;
-}
-//dist_through_fog *= parabola(map(u_cam_pos.y + (fragPosition.y - u_cam_pos.y)*0.5 , u_fog_min, u_fog_max),1.0);
-
-//fog_dist_norm += clamp(0.5f+snoise(fragPosition/50.f + u_time/10.), 0, 1)/30;
-#define FOG_SAMPLE_NUM 20
-#define MAX_FOG_PARTICLES 2000.0
-#define MAX_FOG_NORM 0.95 //max opacity of fog
-float value = 0.0;
-float step_size_m = length(p2 - p1)/FOG_SAMPLE_NUM;
-vec3 dir = normalize(p2 - p1);
-vec3 sample_point = p1;
-
-for(int i = 0; i < FOG_SAMPLE_NUM; i++){
-	float p = clamp(parabola(map(sample_point.y, u_fog_min, u_fog_max),1),0,1)*2;// + snoise(sample_point/100 + u_time/10);// + clamp(0.5f + snoise(fragPosition + u_time/10), 0, 1)/10 + 1;
-	value += p*step_size_m;
-	sample_point += dir*step_size_m;
-}
-#endif
-
-value += clamp(length(cam_to_frag)*4, 0, 1000);
-
-value = clamp(value/MAX_FOG_PARTICLES, 0, MAX_FOG_NORM);
-
-	vec3 fog_mix = mix(result, u_clear_col, value);
-	if(u_drawing_far_plane){
-		gl_FragColor = vec4(vec3(fog_mix) + rand(fragPosition + u_time)/255, value);
-	}else{
-		gl_FragColor = vec4(vec3(fog_mix) + rand(fragPosition + u_time)/255, 1.0);
-	}
+//	gl_FragColor = vec4(vec3(fog_mix) + rand(fragPosition + u_time)/255, 1.0);
 
 	//gl_FragColor = vec4(vec3(value), 1.0);
-	//gl_FragColor = vec4(vec3(depth),1.0);
+	gl_FragColor = vec4(vec3(dist/1000),1.0);
+	//gl_FragColor = vec4(vec2(gl_FragCoord.xy/2000),1.0,1.0);
+	//gl_FragColor = vec4(vec3(pos.y> 100),1.0);
 	//gl_FragDepth = log2(fragDepth) * u_log_depth * 0.5;
 }

@@ -1,4 +1,3 @@
-
 #include "pch.h"
 #include "LevelFile.h"
 #include "common.h"
@@ -17,7 +16,52 @@ bool mult_select = false;
 unsigned int selected_light = 0;
 bool imgui_hovered = false;
 Shader ground_shader;
-Model skybox;
+Camera2D camera = { 0 };
+
+struct body_t {
+	Vector2 position;
+	Vector2 velocity_mps;
+	float radius_m;
+	float mass_kg;
+
+	// Shader locations
+	unsigned int u_position_loc;
+	unsigned int u_radius_loc;
+	unsigned int u_mass_loc;
+};
+
+#define NUM_BODIES 20
+body_t bodies[NUM_BODIES];
+
+void update_bodies() {
+
+}
+
+void draw_bodies() {
+
+	for (int i = 0; i < NUM_BODIES; i++) {
+		const float bodyDensity = bodies[i].mass_kg / bodies[i].radius_m;
+		const Color bodyColor = lerp(PINK, DARKBROWN, Clamp(bodyDensity / 10.0f, 0.0f, 1.0f));
+		DrawCircle(bodies[i].position.x, bodies[i].position.y, bodies[i].radius_m, bodyColor);
+	}
+}
+
+struct player_t {
+	Vector2 position;
+	Vector2 velocity_mps;
+
+	void update() {
+		//Vector2  = {0};
+		for (int i = 0; i < NUM_BODIES; i++) {
+			
+
+		}
+	}
+
+	void draw() {
+
+	}
+};
 
 const float cam_far = RL_CULL_DISTANCE_FAR;
 const float cam_near = RL_CULL_DISTANCE_NEAR;
@@ -45,10 +89,19 @@ bool fullscreen = false;
 
 input_state_t inputs;
 
-//@HACK
-bool healed = false;
-
 void reset() {
+	camera.target = Vector2{ screen_width/2.0f, screen_height/2.0f };
+	camera.offset = Vector2{ screen_width / 2.0f, screen_height / 2.0f };
+	//camera.offset = Vector2{ 0.0f, 0.0f };
+	camera.rotation = 0.0f;
+	camera.zoom = 1.0f;
+
+	for (int i = 0; i < NUM_BODIES; i++)
+	{
+		bodies[i].position = Vector2{ rand_norm() * screen_width, rand_norm() * screen_height };
+		bodies[i].mass_kg = rand_norm() * rand_norm() * 1000.0f;
+		bodies[i].radius_m = rand_norm() * rand_norm() * 300.0f;
+	}
 }
 
 #define INPUT(KEY_FLAG) \
@@ -202,12 +255,28 @@ void draw(float extrap_dt_s, float game_dt) {
 
 	ClearBackground(clear);
 
-	//BeginMode2D();
+	BeginMode2D(camera);
 
 #define X(shader, name, address, type)\
 SetShaderValue(shader, u_ ## name ## _loc, address, type);
 	UNIFORMS
 #undef X
+
+	BeginShaderMode(ground_shader);
+
+	for (int i = 0; i < NUM_BODIES; i++) {
+		SetShaderValue(ground_shader, bodies[i].u_position_loc, &bodies[i].position, SHADER_UNIFORM_VEC2);
+		SetShaderValue(ground_shader, bodies[i].u_radius_loc, &bodies[i].radius_m, SHADER_UNIFORM_FLOAT);
+		SetShaderValue(ground_shader, bodies[i].u_mass_loc, &bodies[i].mass_kg, SHADER_UNIFORM_FLOAT);
+	}
+
+	DrawRectangle(0, 0, screen_width, screen_height, WHITE);
+	EndShaderMode();
+
+	draw_bodies();
+
+	DrawCircle(0, 0, 10, RED);
+	DrawCircle(100, 100, 10, BLUE);
 
 	EndMode2D();
 
@@ -219,7 +288,7 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 }
 
 void load_shaders_and_font() {
-	ground_shader = LoadShader(shader_dir "base_lighting.vs", shader_dir "shader.fs");
+	ground_shader = LoadShader(0, shader_dir "shader.fs");
 
 	ground_shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(ground_shader, "matModel");
 
@@ -227,7 +296,20 @@ void load_shaders_and_font() {
 u_ ## name ## _loc = GetShaderLocation(shader, "u_" #name "\0" );
 	UNIFORMS
 #undef X
+		//light locations
+		for (int i = 0; i < NUM_BODIES; i++) {
+			char position_name[32] = "u_bodies[x].position\0";
+			char mass_name[32] = "u_bodies[x].mass\0";
+			char radius_name[32] = "u_bodies[x].radius\0";
 
+			sprintf(position_name, "u_bodies[%i].position", i);
+			sprintf(mass_name, "u_bodies[%i].mass", i);
+			sprintf(radius_name, "u_bodies[%i].radius", i);
+
+			bodies[i].u_position_loc = GetShaderLocation(ground_shader, position_name);
+			bodies[i].u_mass_loc = GetShaderLocation(ground_shader, mass_name);
+			bodies[i].u_radius_loc = GetShaderLocation(ground_shader, radius_name);
+		}
 }
 
 int main() {

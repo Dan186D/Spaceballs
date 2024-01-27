@@ -18,5 +18,7 @@ C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(947,13):
 C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(953,13): warning C4305: 'return': truncation from 'int' to 'bool'
 C:\Users\eatol\Documents\GitHub\Spaceballs\raylib\src\config.h(108,1): warning C4005: 'RL_CULL_DISTANCE_FAR': macro redefinition
 C:\Users\eatol\Documents\GitHub\Spaceballs\raylib\src\rlgl.h(230): message : see previous definition of 'RL_CULL_DISTANCE_FAR'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(23,45): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(45,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(45,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(67,45): warning C4305: 'initializing': truncation from 'double' to 'float'
   DroneDefense_raylib.vcxproj -> C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\..\bin\Debug\censer.exe
