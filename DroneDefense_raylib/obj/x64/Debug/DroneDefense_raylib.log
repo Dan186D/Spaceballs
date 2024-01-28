@@ -1,24 +1,26 @@
 ﻿  main.cc
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\winuser.h(10823,1): warning C4005: 'LoadImage': macro redefinition
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\pch.h(57): message : see previous definition of 'LoadImage'
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\um\playsoundapi.h(121,1): warning C4005: 'PlaySound': macro redefinition
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\pch.h(58): message : see previous definition of 'PlaySound'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\io.h(9,30): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\io.h(9,30): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\io.h(10,34): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\io.h(10,34): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(39,1): warning C4005: 'EPSILON': macro redefinition
-C:\Users\eatol\Documents\GitHub\Spaceballs\raylib\src\raymath.h(81): message : see previous definition of 'EPSILON'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(98,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(99,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(100,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(101,18): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(941,13): warning C4305: 'return': truncation from 'int' to 'bool'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(947,13): warning C4305: 'return': truncation from 'int' to 'bool'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\common.h(953,13): warning C4305: 'return': truncation from 'int' to 'bool'
-C:\Users\eatol\Documents\GitHub\Spaceballs\raylib\src\config.h(108,1): warning C4005: 'RL_CULL_DISTANCE_FAR': macro redefinition
-C:\Users\eatol\Documents\GitHub\Spaceballs\raylib\src\rlgl.h(230): message : see previous definition of 'RL_CULL_DISTANCE_FAR'
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(45,54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(45,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\main.cc(67,45): warning C4305: 'initializing': truncation from 'double' to 'float'
-  DroneDefense_raylib.vcxproj -> C:\Users\eatol\Documents\GitHub\Spaceballs\DroneDefense_raylib\..\bin\Debug\censer.exe
+c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\winuser.h(10568): warning C4005: 'LoadImage': macro redefinition
+  g:\spaceballs\dronedefense_raylib\pch.h(57): note: see previous definition of 'LoadImage'
+c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\playsoundapi.h(121): warning C4005: 'PlaySound': macro redefinition
+  g:\spaceballs\dronedefense_raylib\pch.h(58): note: see previous definition of 'PlaySound'
+g:\spaceballs\dronedefense_raylib\io.h(9): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
+g:\spaceballs\dronedefense_raylib\io.h(9): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
+g:\spaceballs\dronedefense_raylib\io.h(10): warning C4267: 'initializing': conversion from 'size_t' to 'zint', possible loss of data
+g:\spaceballs\dronedefense_raylib\io.h(10): warning C4267: 'initializing': conversion from 'size_t' to 'const zint', possible loss of data
+g:\spaceballs\dronedefense_raylib\common.h(36): warning C4005: 'EPSILON': macro redefinition
+  g:\spaceballs\raylib\src\raymath.h(81): note: see previous definition of 'EPSILON'
+g:\spaceballs\dronedefense_raylib\common.h(95): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+g:\spaceballs\dronedefense_raylib\common.h(96): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+g:\spaceballs\dronedefense_raylib\common.h(97): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+g:\spaceballs\dronedefense_raylib\common.h(98): warning C4244: '=': conversion from 'float' to 'unsigned char', possible loss of data
+g:\spaceballs\dronedefense_raylib\common.h(938): warning C4305: 'return': truncation from 'int' to 'bool'
+g:\spaceballs\dronedefense_raylib\common.h(944): warning C4305: 'return': truncation from 'int' to 'bool'
+g:\spaceballs\dronedefense_raylib\common.h(950): warning C4305: 'return': truncation from 'int' to 'bool'
+g:\spaceballs\raylib\src\config.h(108): warning C4005: 'RL_CULL_DISTANCE_FAR': macro redefinition
+  g:\spaceballs\raylib\src\rlgl.h(230): note: see previous definition of 'RL_CULL_DISTANCE_FAR'
+g:\spaceballs\dronedefense_raylib\main.cc(45): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+g:\spaceballs\dronedefense_raylib\main.cc(67): warning C4305: 'initializing': truncation from 'double' to 'float'
+g:\spaceballs\dronedefense_raylib\main.cc(100): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+g:\spaceballs\dronedefense_raylib\main.cc(170): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+g:\spaceballs\dronedefense_raylib\main.cc(277): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  DroneDefense_raylib.vcxproj -> G:\Spaceballs\DroneDefense_raylib\..\bin\Debug\censer.exe

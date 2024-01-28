@@ -26,9 +26,6 @@ extern float game_time_s;
 
 extern int killed_enemies;
 
-extern unsigned int screen_width;
-extern unsigned int screen_height;
-
 extern bool editor_mode;
 extern bool debug_collision_detection;
 extern bool debug_enemy;

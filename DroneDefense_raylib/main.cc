@@ -67,6 +67,7 @@ const float cam_far = RL_CULL_DISTANCE_FAR;
 const float cam_near = RL_CULL_DISTANCE_NEAR;
 #define UNIFORMS \
 X(ground_shader, time, &game_time_s, SHADER_UNIFORM_FLOAT)\
+X(ground_shader, screen_dims, &screen_dims, SHADER_UNIFORM_VEC2)\
 
 #define X(shader, name, address, type) unsigned int u_ ## name ## _loc;
 UNIFORMS
@@ -83,22 +84,25 @@ float game_time_s = 0.0f;
 
 bool extrap = true;
 
-unsigned int screen_width = int(1920*1.7);
-unsigned int screen_height = int(1080*1.7);
+Vector2 screen_dims = Vector2{ 1920.0f, 1080.0f };
 bool fullscreen = false;
 
 input_state_t inputs;
 
 void reset() {
-	camera.target = Vector2{ screen_width/2.0f, screen_height/2.0f };
-	camera.offset = Vector2{ screen_width / 2.0f, screen_height / 2.0f };
+	camera.target = Vector2{ 0.0f, 0.0f };
+	camera.offset = Vector2{ 0.0f, 0.0f };
 	//camera.offset = Vector2{ 0.0f, 0.0f };
 	camera.rotation = 0.0f;
 	camera.zoom = 1.0f;
 
+	screen_dims = Vector2{ (float)GetMonitorWidth(0), (float)GetMonitorWidth(0) } * 1.0f;
+	SetWindowSize(screen_dims.x, screen_dims.y);
+	SetWindowPosition(0, 0);
+
 	for (int i = 0; i < NUM_BODIES; i++)
 	{
-		bodies[i].position = Vector2{ rand_norm() * screen_width, rand_norm() * screen_height };
+		bodies[i].position = Vector2{ rand_norm() * screen_dims.x, rand_norm() * screen_dims.y};
 		bodies[i].mass_kg = rand_norm() * rand_norm() * 1000.0f;
 		bodies[i].radius_m = rand_norm() * rand_norm() * 300.0f;
 	}
@@ -114,8 +118,7 @@ void input() {
 	ImGui_ImplRaylib_ProcessEvent();
 
 	if(IsWindowResized()) {
-		screen_width = GetScreenWidth();
-		screen_height = GetScreenHeight();
+		screen_dims = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() };
 	}
 
 	if(IsWindowFocused() && !imgui_hovered) {
@@ -150,9 +153,9 @@ void input() {
 		// get the mouse position
 		Vector2 mouse_pos_screen = GetMousePosition();
 
-		inputs.mouse_pos = screen_coords_to_ndc(mouse_pos_screen, Vector2{ (float)screen_width, (float)screen_height });
+		inputs.mouse_pos = screen_coords_to_ndc(mouse_pos_screen, screen_dims);
 
-		if(mouse_pos_screen == Vector2{ (float)(screen_width/2), (float)(screen_height/2) }) { inputs.mouse_pos = Vector2Zero(); };
+		if(mouse_pos_screen == screen_dims * 0.5f) { inputs.mouse_pos = Vector2Zero(); };
 
 		bool move_camera = editor_mode ? inputs.input_state & INPUT_FLAGS::RMB && !(inputs.input_down & INPUT_FLAGS::RMB) : true;
 
@@ -163,7 +166,8 @@ void input() {
 		}
 
 		if(set_mouse_pos) {
-			SetMousePosition(screen_width/2, screen_height/2);
+			Vector2 halfScreen = screen_dims * 0.5f;
+			SetMousePosition(halfScreen.x, halfScreen.y);
 		}
 	}
 }
@@ -270,13 +274,13 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 		SetShaderValue(ground_shader, bodies[i].u_mass_loc, &bodies[i].mass_kg, SHADER_UNIFORM_FLOAT);
 	}
 
-	DrawRectangle(0, 0, screen_width, screen_height, WHITE);
+	DrawRectangle(0, 0, screen_dims.x, screen_dims.y, WHITE);
 	EndShaderMode();
 
 	draw_bodies();
 
 	DrawCircle(0, 0, 10, RED);
-	DrawCircle(100, 100, 10, BLUE);
+	DrawCircle(960, 540, 10, BLUE);
 
 	EndMode2D();
 
@@ -313,19 +317,21 @@ u_ ## name ## _loc = GetShaderLocation(shader, "u_" #name "\0" );
 }
 
 int main() {
+	
 	ImGuiContext* c = ImGui::CreateContext();
 	ImGui::SetCurrentContext(c);
 	ImGui::GetIO().FontGlobalScale = 3.0f;
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-	InitWindow(screen_width, screen_height, "Censer");
+	InitWindow(1, 1, "Censer");
+	reset();
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	ImGui_ImplRaylib_Init();
 	editor_mode = true;
 
 	load_shaders_and_font();
 
-	reset();
+	
 
 	//SetCameraMode(player_camera, CAMERA_PERSPECTIVE);
 

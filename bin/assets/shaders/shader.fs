@@ -9,16 +9,9 @@ struct body_t{
 #define BODY_NUM 20 
 
 uniform sampler2D texture0;
-uniform vec3 u_clear_col;
-uniform float u_fog_min;
-uniform float u_fog_max;
-uniform vec3 u_cam_pos;
-uniform float u_cam_near;
-uniform float u_cam_far;
+uniform vec2 u_screen_dims;
 uniform float u_time;
 uniform body_t u_bodies[BODY_NUM];
-uniform float u_log_depth;
-uniform bool u_drawing_far_plane;
 
 out vec4 FragColor;
 
@@ -114,19 +107,18 @@ float snoise(vec3 p) {
 
 void main() {
 
-vec2 pos = vec2(gl_FragCoord.x, (1080*1.7) - gl_FragCoord.y );
+vec2 pos = vec2(gl_FragCoord.x, u_screen_dims.y - gl_FragCoord.y );
 float dist = 1000.0;
 	for(int i = 0; i < BODY_NUM; i++)
 	{
 	  dist = min(dist, length(u_bodies[i].position - pos.xy));
-
 	}
 
 //	gl_FragColor = vec4(vec3(fog_mix) + rand(fragPosition + u_time)/255, 1.0);
 
 	//gl_FragColor = vec4(vec3(value), 1.0);
 	gl_FragColor = vec4(vec3(dist/1000),1.0);
-	//gl_FragColor = vec4(vec2(gl_FragCoord.xy/2000),1.0,1.0);
+	gl_FragColor = vec4(vec2(pos / u_screen_dims),0.0,1.0);
 	//gl_FragColor = vec4(vec3(pos.y> 100),1.0);
 	//gl_FragDepth = log2(fragDepth) * u_log_depth * 0.5;
 }
