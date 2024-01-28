@@ -16,6 +16,7 @@ bool mult_select = false;
 unsigned int selected_light = 0;
 bool imgui_hovered = false;
 Shader ground_shader;
+float G_constant = 1.0;
 Camera2D camera = { 0 };
 
 struct body_t {
@@ -47,21 +48,33 @@ void draw_bodies() {
 }
 
 struct player_t {
-	Vector2 position;
-	Vector2 velocity_mps;
+	Vector2 position = Vector2Zero();
+	Vector2 velocity_mps = Vector2Zero();
 
 	void update() {
-		//Vector2  = {0};
-		for (int i = 0; i < NUM_BODIES; i++) {
-			
+		Vector2 gravity_force_N = Vector2Zero();
 
+		for (int i = 0; i < NUM_BODIES; i++) {
+			float dist_M = Vector2Distance(position, bodies[i].position);
+			float gravity_strength_N = (G_constant * bodies[i].mass_kg) / (dist_M * dist_M);
+			Vector2 direction = Vector2Normalize(bodies[i].position - position);
+
+			gravity_force_N += direction * gravity_strength_N;
 		}
+		
+		velocity_mps += gravity_force_N;
+
+		position += velocity_mps;
+
 	}
 
 	void draw() {
+		DrawCircle(position.x, position.y, 10, BLUE);
 
 	}
 };
+
+player_t player;
 
 const float cam_far = RL_CULL_DISTANCE_FAR;
 const float cam_near = RL_CULL_DISTANCE_NEAR;
@@ -95,6 +108,9 @@ void reset() {
 	//camera.offset = Vector2{ 0.0f, 0.0f };
 	camera.rotation = 0.0f;
 	camera.zoom = 1.0f;
+
+	player.position = Vector2Zero();
+	player.velocity_mps = Vector2Zero();
 
 	screen_dims = Vector2{ (float)GetMonitorWidth(0), (float)GetMonitorWidth(0) } * 1.0f;
 	SetWindowSize(screen_dims.x, screen_dims.y);
@@ -198,6 +214,9 @@ void update() {
 	if(inputs.input_down & INPUT_FLAGS::R) {
 		reset();
 	}
+
+	player.update();
+
 	
 }
 
@@ -278,6 +297,8 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 	EndShaderMode();
 
 	draw_bodies();
+
+	player.draw();
 
 	DrawCircle(0, 0, 10, RED);
 	DrawCircle(960, 540, 10, BLUE);
