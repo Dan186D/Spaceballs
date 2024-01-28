@@ -47,11 +47,7 @@ void draw_bodies() {
 	}
 }
 
-struct player_t {
-	Vector2 position = Vector2Zero();
-	Vector2 velocity_mps = Vector2Zero();
-
-	void update() {
+Vector2 calc_gravity(Vector2 position) {
 		Vector2 gravity_force_N = Vector2Zero();
 
 		for (int i = 0; i < NUM_BODIES; i++) {
@@ -61,15 +57,71 @@ struct player_t {
 
 			gravity_force_N += direction * gravity_strength_N;
 		}
-		
-		velocity_mps += gravity_force_N;
 
+		return gravity_force_N;
+
+}
+
+struct ball_t {
+	Vector2 position = Vector2Zero();
+	Vector2 velocity_mps = Vector2Zero();
+	bool active = false;
+
+	void init(Vector2 pos) {
+		position = pos;
+		active = true;
+	}
+
+	void update() {
+		velocity_mps += calc_gravity(position);
 		position += velocity_mps;
-
 	}
 
 	void draw() {
-		DrawCircle(position.x, position.y, 10, BLUE);
+		DrawCircle(position.x, position.y, 10, RED);
+	}
+
+};
+
+#define BALL_NUM 50
+ball_t balls[BALL_NUM];
+
+void update_balls() {
+	for (int i = 0; i < BALL_NUM; i++) {
+		if (balls[i].active) {
+			balls[i].update();
+		}
+	}
+}
+
+void draw_balls() {
+	for (int i = 0; i < BALL_NUM; i++) {
+		if (balls[i].active) {
+			balls[i].draw();
+		}
+	}
+}
+
+void add_ball(Vector2 pos) {
+	static int ball_num = 0;
+	balls[ball_num].init(pos);
+
+	ball_num = (ball_num + 1) % BALL_NUM;
+}
+
+
+struct player_t {
+	Vector2 position = Vector2Zero();
+	Vector2 velocity_mps = Vector2Zero();
+
+	void update() {
+		velocity_mps += calc_gravity(position);
+
+		position += velocity_mps;
+	}
+
+	void draw() {
+		DrawCircle(position.x, position.y, 20, BLUE);
 
 	}
 };
@@ -116,8 +168,7 @@ void reset() {
 	SetWindowSize(screen_dims.x, screen_dims.y);
 	SetWindowPosition(0, 0);
 
-	for (int i = 0; i < NUM_BODIES; i++)
-	{
+	for (int i = 0; i < NUM_BODIES; i++) {
 		bodies[i].position = Vector2{ rand_norm() * screen_dims.x, rand_norm() * screen_dims.y};
 		bodies[i].mass_kg = fmax(rand_norm() * rand_norm() * 1000.0f, 10);
 		bodies[i].radius_m = fmax(rand_norm() * rand_norm() * 300.0f, 10);
@@ -215,9 +266,13 @@ void update() {
 		reset();
 	}
 
-	player.update();
+	if (inputs.input_down & INPUT_FLAGS::LMB) {
+		add_ball(GetMousePosition());
+	}
 
-	
+	player.update();
+	update_balls();
+
 }
 
 void imgui() {
@@ -297,6 +352,8 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 	EndShaderMode();
 
 	draw_bodies();
+
+	draw_balls();
 
 	player.draw();
 
