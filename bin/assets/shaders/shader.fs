@@ -106,19 +106,29 @@ float snoise(vec3 p) {
 }
 
 void main() {
-
-vec2 pos = vec2(gl_FragCoord.x, u_screen_dims.y - gl_FragCoord.y );
-float dist = 1000.0;
+	vec2 pos = vec2(gl_FragCoord.x, u_screen_dims.y - gl_FragCoord.y );
+	vec2 gravityVec = vec2(0,0);
 	for(int i = 0; i < BODY_NUM; i++)
 	{
-	  dist = min(dist, length(u_bodies[i].position - pos.xy));
+		float bodyDistance = distance(u_bodies[i].position, pos);
+		float gConstant = 1.0f;
+		float sampleMass = 100.0f;
+		float gravityStrength = (gConstant * sampleMass * u_bodies[i].mass) / (bodyDistance * bodyDistance);
+		vec2 direction = normalize(u_bodies[i].position - pos);
+		gravityVec += (gravityStrength * direction);
 	}
 
-//	gl_FragColor = vec4(vec3(fog_mix) + rand(fragPosition + u_time)/255, 1.0);
+	float gravityMag = length(gravityVec);
+	int period = 3; // reduce this to increase the frequency of lines
+	float tolerance = 0.1; // increase this to increase the thickness of lines
+	float minSensitivity = 0;
+	float speed = 1.0f;
 
-	//gl_FragColor = vec4(vec3(value), 1.0);
-	gl_FragColor = vec4(vec3(dist/1000),1.0);
-	gl_FragColor = vec4(vec2(pos / u_screen_dims),0.0,1.0);
-	//gl_FragColor = vec4(vec3(pos.y> 100),1.0);
-	//gl_FragDepth = log2(fragDepth) * u_log_depth * 0.5;
+	vec3 lineColor = vec3(0.0,0.0,0.0);
+	if ((floor(mod(gravityMag - (u_time * speed), period)) <= tolerance) && gravityMag >= minSensitivity)
+	{
+		lineColor = vec3(1.0,1.0,1.0) * gravityMag * gravityMag * 0.01f;
+	}
+
+	gl_FragColor = vec4(lineColor,1.0);
 }

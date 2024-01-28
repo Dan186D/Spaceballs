@@ -31,7 +31,7 @@ struct body_t {
 	unsigned int u_mass_loc;
 };
 
-#define NUM_BODIES 20
+#define NUM_BODIES 5
 body_t bodies[NUM_BODIES];
 
 void update_bodies() {
@@ -119,8 +119,8 @@ void reset() {
 	for (int i = 0; i < NUM_BODIES; i++)
 	{
 		bodies[i].position = Vector2{ rand_norm() * screen_dims.x, rand_norm() * screen_dims.y};
-		bodies[i].mass_kg = rand_norm() * rand_norm() * 1000.0f;
-		bodies[i].radius_m = rand_norm() * rand_norm() * 300.0f;
+		bodies[i].mass_kg = fmax(rand_norm() * rand_norm() * 1000.0f, 10);
+		bodies[i].radius_m = fmax(rand_norm() * rand_norm() * 300.0f, 10);
 	}
 }
 
