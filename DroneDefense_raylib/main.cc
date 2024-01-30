@@ -65,6 +65,7 @@ Vector2 calc_gravity(Vector2 position) {
 struct ball_t {
 	Vector2 position = Vector2Zero();
 	Vector2 velocity_mps = Vector2Zero();
+	float radius_m = 10;
 	bool active = false;
 
 	void init(Vector2 pos) {
@@ -75,10 +76,19 @@ struct ball_t {
 	void update() {
 		velocity_mps += calc_gravity(position);
 		position += velocity_mps;
+
+		for (int i = 0; i < NUM_BODIES; i++) {
+			float combinedRadii = bodies[i].radius_m + radius_m;
+			if (Vector2Distance(bodies[i].position, position) <= combinedRadii) {
+				Vector2 normal = Vector2Normalize(position - bodies[i].position);
+				position = bodies[i].position + normal * combinedRadii;
+				velocity_mps = Vector2Reflect(velocity_mps, normal);
+			}
+		}
 	}
 
 	void draw() {
-		DrawCircle(position.x, position.y, 10, RED);
+		DrawCircle(position.x, position.y, radius_m, RED);
 	}
 
 };
@@ -170,8 +180,8 @@ void reset() {
 
 	for (int i = 0; i < NUM_BODIES; i++) {
 		bodies[i].position = Vector2{ rand_norm() * screen_dims.x, rand_norm() * screen_dims.y};
-		bodies[i].mass_kg = fmax(rand_norm() * rand_norm() * 1000.0f, 10);
-		bodies[i].radius_m = fmax(rand_norm() * rand_norm() * 300.0f, 10);
+		bodies[i].mass_kg = fmax(rand_norm() * rand_norm() * 1000.0f, 100);
+		bodies[i].radius_m = fmax(rand_norm() * rand_norm() * 300.0f, 100);
 	}
 }
 

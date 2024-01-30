@@ -112,22 +112,21 @@ void main() {
 	{
 		float bodyDistance = distance(u_bodies[i].position, pos);
 		float gConstant = 1.0f;
-		float sampleMass = 100.0f;
+		float sampleMass = 1000.0f;
 		float gravityStrength = (gConstant * sampleMass * u_bodies[i].mass) / (bodyDistance * bodyDistance);
 		vec2 direction = normalize(u_bodies[i].position - pos);
 		gravityVec += (gravityStrength * direction);
 	}
 
 	float gravityMag = length(gravityVec);
-	int period = 3; // reduce this to increase the frequency of lines
-	float tolerance = 0.1; // increase this to increase the thickness of lines
-	float minSensitivity = 0;
-	float speed = 1.0f;
+	int period = 4; // reduce this to increase the frequency of lines
+	float tolerance = 0.2; // increase this to increase the thickness of lines
+	float speed = 5.0f;
 
 	vec3 lineColor = vec3(0.0,0.0,0.0);
-	if ((floor(mod(gravityMag - (u_time * speed), period)) <= tolerance) && gravityMag >= minSensitivity)
+	if ((floor(mod(gravityMag - (u_time * speed), period)) <= tolerance))
 	{
-		lineColor = vec3(1.0,1.0,1.0) * gravityMag * gravityMag * 0.01f;
+		lineColor = vec3(1.0,1.0,1.0) * gravityMag * gravityMag * gravityMag * 0.0001f;
 	}
 
 	gl_FragColor = vec4(lineColor,1.0);
