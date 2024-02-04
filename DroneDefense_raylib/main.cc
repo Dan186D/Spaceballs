@@ -73,6 +73,11 @@ struct ball_t {
 		active = true;
 	}
 
+	void init(Vector2 pos, Vector2 vel) {
+		init(pos);
+		velocity_mps = vel;
+	}
+
 	void update() {
 		velocity_mps += calc_gravity(position);
 		position += velocity_mps;
@@ -112,11 +117,15 @@ void draw_balls() {
 	}
 }
 
-void add_ball(Vector2 pos) {
+void add_ball(Vector2 pos, Vector2 vel) {
 	static int ball_num = 0;
-	balls[ball_num].init(pos);
+	balls[ball_num].init(pos, vel);
 
 	ball_num = (ball_num + 1) % BALL_NUM;
+}
+
+void add_ball(Vector2 pos) {
+	add_ball(pos, Vector2{ 0.0f, 0.0f });
 }
 
 
@@ -163,6 +172,8 @@ Vector2 screen_dims = Vector2{ 1920.0f, 1080.0f };
 bool fullscreen = false;
 
 input_state_t inputs;
+#define WAS_MOUSE_PRESSED inputs.prev_input_state & INPUT_FLAGS::LMB
+#define IS_MOUSE_PRESSED inputs.input_state & INPUT_FLAGS::LMB
 
 void reset() {
 	camera.target = Vector2{ 0.0f, 0.0f };
@@ -259,6 +270,9 @@ void editor_update() {
 	}
 }
 
+Vector2 BallSpawnPosition{ 0.0f,0.0f };
+Vector4 DebugLine{ 0.0f, 0.0f, 0.0f, 0.0f };
+
 void update() {
 	static timer_t t;
 	t.freq_hz = 1.0f/1.0f;
@@ -276,8 +290,15 @@ void update() {
 		reset();
 	}
 
-	if (inputs.input_down & INPUT_FLAGS::LMB) {
-		add_ball(GetMousePosition());
+	DebugLine = Vector4{};
+	if (inputs.input_up & INPUT_FLAGS::LMB) {
+		add_ball(BallSpawnPosition, (BallSpawnPosition - GetMousePosition()) * 0.01f);
+	}
+	else if (IS_MOUSE_PRESSED && WAS_MOUSE_PRESSED) {
+		DebugLine = { BallSpawnPosition.x, BallSpawnPosition.y, GetMousePosition().x, GetMousePosition().y };
+	}
+	else if (inputs.input_down & INPUT_FLAGS::LMB) {
+		BallSpawnPosition = GetMousePosition();
 	}
 
 	player.update();
@@ -369,6 +390,7 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 
 	DrawCircle(0, 0, 10, RED);
 	DrawCircle(960, 540, 10, BLUE);
+	DrawLine(DebugLine.x, DebugLine.y, DebugLine.z, DebugLine.w, RED);
 
 	EndMode2D();
 
