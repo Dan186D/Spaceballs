@@ -16,8 +16,11 @@ bool mult_select = false;
 unsigned int selected_light = 0;
 bool imgui_hovered = false;
 Shader ground_shader;
-float G_constant = 1.0;
+float G_constant = 2.0;
 Camera2D camera = { 0 };
+
+#define PREVIEW_NUM 50
+Vector2 preview[PREVIEW_NUM];
 
 struct body_t {
 	Vector2 position;
@@ -52,7 +55,7 @@ Vector2 calc_gravity(Vector2 position) {
 
 		for (int i = 0; i < NUM_BODIES; i++) {
 			float dist_M = Vector2Distance(position, bodies[i].position);
-			float gravity_strength_N = (G_constant * bodies[i].mass_kg) / (dist_M * dist_M);
+			float gravity_strength_N = (G_constant * bodies[i].mass_kg) / pow(dist_M, 1.5f);
 			Vector2 direction = Vector2Normalize(bodies[i].position - position);
 
 			gravity_force_N += direction * gravity_strength_N;
@@ -97,6 +100,26 @@ struct ball_t {
 	}
 
 };
+
+void calculate_preview(Vector2 start, Vector2 vel) {
+	ball_t b;
+	b.position = start;
+	b.velocity_mps = vel;
+
+	constexpr int n = 20;
+
+	for (int i = 0; i < PREVIEW_NUM; i++) {
+		for (int j = 0; j < n; j++) {
+			b.update();
+		}
+		preview[i] = b.position;
+	}
+}
+void draw_preview() {
+	for (int i = 0; i < PREVIEW_NUM; i++) {
+		DrawCircle(preview[i].x, preview[i].y, 10, GREEN);
+	}
+}
 
 #define BALL_NUM 50
 ball_t balls[BALL_NUM];
@@ -266,7 +289,7 @@ void editor_update() {
 		if (editor_mode) {
 			ShowCursor();
 		}
-		HideCursor();
+		//HideCursor();
 	}
 }
 
@@ -296,6 +319,7 @@ void update() {
 	}
 	else if (IS_MOUSE_PRESSED && WAS_MOUSE_PRESSED) {
 		DebugLine = { BallSpawnPosition.x, BallSpawnPosition.y, GetMousePosition().x, GetMousePosition().y };
+		calculate_preview(BallSpawnPosition, (BallSpawnPosition - GetMousePosition()) * 0.01f);
 	}
 	else if (inputs.input_down & INPUT_FLAGS::LMB) {
 		BallSpawnPosition = GetMousePosition();
@@ -391,12 +415,15 @@ SetShaderValue(shader, u_ ## name ## _loc, address, type);
 	DrawCircle(0, 0, 10, RED);
 	DrawCircle(960, 540, 10, BLUE);
 	DrawLine(DebugLine.x, DebugLine.y, DebugLine.z, DebugLine.w, RED);
+	draw_preview();
 
 	EndMode2D();
 
 	DrawFPS(10, 10);
 
+#if 0
 	imgui();
+#endif
 
 	EndDrawing();
 }
@@ -445,11 +472,11 @@ int main() {
 
 	//SetCameraMode(player_camera, CAMERA_PERSPECTIVE);
 
-	SetTargetFPS(120);
+	SetTargetFPS(144);
 
 	static float lag_s = 0.0f;
 
-	HideCursor();
+	//HideCursor();
 	while(!WindowShouldClose())
 	{
 		const float dt = GetFrameTime();
